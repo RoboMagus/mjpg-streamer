@@ -68,7 +68,7 @@ static void help() {
     
     fprintf(stderr,
     " ---------------------------------------------------------------\n" \
-    " Help for input plugin..: "INPUT_PLUGIN_NAME"\n" \
+    " Help for input plugin..: " INPUT_PLUGIN_NAME "\n" \
     " ---------------------------------------------------------------\n" \
     " The following parameters can be passed to this plugin:\n\n" \
     " [-r | --resolution ]...: the resolution of the video device,\n" \
