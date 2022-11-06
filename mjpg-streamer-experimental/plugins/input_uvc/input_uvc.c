@@ -25,6 +25,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <unistd.h>
 #include <string.h>
 #include <sys/ioctl.h>
@@ -673,6 +674,9 @@ void *cam_thread(void *arg)
         goto endloop;
     }
 
+    uint8_t grab_frame_error_cnt = 0;
+    const uint8_t grab_frame_error_threshold = 30;
+    
     while(!pglobal->stop) {
         while(pcontext->videoIn->streamingState == STREAMING_PAUSED) {
             usleep(1); // maybe not the best way so FIXME
@@ -720,8 +724,18 @@ void *cam_thread(void *arg)
             DBG("Grabbing a frame...\n");
             /* grab a frame */
             if(uvcGrab(pcontext->videoIn) < 0) {
-                IPRINT("Error grabbing frames\n");
-                goto endloop;
+                grab_frame_error_cnt++;
+                IPRINT("Error grabbing frames (%d)\n", grab_frame_error_cnt);
+                if(grab_frame_error_cnt < grab_frame_error_threshold) {
+                    sleep(1);
+                    goto other_select_handlers;
+                }
+                else {
+                    goto endloop;
+                }
+            }
+            else {
+                grab_frame_error_cnt = 0;
             }
 
             if ( every_count < every - 1 ) {
