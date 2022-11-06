@@ -511,7 +511,8 @@ static int video_disable(struct vdIn *vd, streaming_state disabledState)
     ret = xioctl(vd->fd, VIDIOC_STREAMOFF, &type);
     if(ret != 0) {
         perror("Unable to stop capture");
-        return ret;
+        //return ret;
+        exit(ret);
     }
     DBG("STopping capture done\n");
     vd->streamingState = disabledState;
