@@ -2,6 +2,7 @@ FROM alpine:3.16
 
 RUN apk --no-cache add gcc make cmake linux-headers musl-dev libjpeg-turbo-dev
 
+ADD mjpg-streamer-experimental /mjpg-streamer-experimental
 RUN cd mjpg-streamer-experimental && make && make install
 
 EXPOSE 80
